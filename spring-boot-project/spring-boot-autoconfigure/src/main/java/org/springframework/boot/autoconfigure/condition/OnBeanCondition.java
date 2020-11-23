@@ -88,8 +88,7 @@ class OnBeanCondition extends FilteringSpringBootCondition
 		for (int i = 0; i < outcomes.length; i++) {
 			String autoConfigurationClass = autoConfigurationClasses[i];
 			if (autoConfigurationClass != null) {
-				Set<String> onBeanTypes = autoConfigurationMetadata
-						.getSet(autoConfigurationClass, "ConditionalOnBean");
+				Set<String> onBeanTypes = autoConfigurationMetadata.getSet(autoConfigurationClass, "ConditionalOnBean");
 				outcomes[i] = getOutcome(onBeanTypes, ConditionalOnBean.class);
 				if (outcomes[i] == null) {
 					Set<String> onSingleCandidateTypes = autoConfigurationMetadata.getSet(
@@ -104,8 +103,7 @@ class OnBeanCondition extends FilteringSpringBootCondition
 
 	private ConditionOutcome getOutcome(Set<String> requiredBeanTypes,
 			Class<? extends Annotation> annotation) {
-		List<String> missing = filter(requiredBeanTypes, ClassNameFilter.MISSING,
-				getBeanClassLoader());
+		List<String> missing = filter(requiredBeanTypes, ClassNameFilter.MISSING, getBeanClassLoader());
 		if (!missing.isEmpty()) {
 			ConditionMessage message = ConditionMessage.forCondition(annotation)
 					.didNotFind("required type", "required types")

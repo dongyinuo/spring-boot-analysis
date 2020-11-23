@@ -15,6 +15,9 @@
  */
 
 /**
+ * 生成配置文件自动提示
+ * https://my.oschina.net/u/3217171/blog/3044920
+ * https://www.cnblogs.com/Purgeyao/p/11439555.html
  * Annotation processor to create {@code @ConfigurationProperties} meta-data files.
  */
 package org.springframework.boot.configurationprocessor;

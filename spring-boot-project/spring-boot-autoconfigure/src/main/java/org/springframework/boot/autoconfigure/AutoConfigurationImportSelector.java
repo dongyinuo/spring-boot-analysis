@@ -95,10 +95,12 @@ public class AutoConfigurationImportSelector
 		if (!isEnabled(annotationMetadata)) {
 			return NO_IMPORTS;
 		}
+		// 自动配置元数据
 		AutoConfigurationMetadata autoConfigurationMetadata = AutoConfigurationMetadataLoader
 				.loadMetadata(this.beanClassLoader);
-		AutoConfigurationEntry autoConfigurationEntry = getAutoConfigurationEntry(
-				autoConfigurationMetadata, annotationMetadata);
+
+		AutoConfigurationEntry autoConfigurationEntry =
+				getAutoConfigurationEntry(autoConfigurationMetadata, annotationMetadata);
 		return StringUtils.toStringArray(autoConfigurationEntry.getConfigurations());
 	}
 
@@ -115,14 +117,22 @@ public class AutoConfigurationImportSelector
 		if (!isEnabled(annotationMetadata)) {
 			return EMPTY_ENTRY;
 		}
+
+		// 查询注解元数据 (学习)
 		AnnotationAttributes attributes = getAttributes(annotationMetadata);
-		List<String> configurations = getCandidateConfigurations(annotationMetadata,
-				attributes);
+		// 查询 spring boot 自动配置类 (EnableAutoConfiguration)
+		List<String> configurations = getCandidateConfigurations(annotationMetadata, attributes);
+		// 移除重复的 自动配置类
 		configurations = removeDuplicates(configurations);
+
 		Set<String> exclusions = getExclusions(annotationMetadata, attributes);
 		checkExcludedClasses(configurations, exclusions);
+		// 移除一些在 @SpringBootApplication 中声明要排出的自动配置类
 		configurations.removeAll(exclusions);
+
+		// 过滤一些不满足条件的自动配置类
 		configurations = filter(configurations, autoConfigurationMetadata);
+		// 激活自动导入时间
 		fireAutoConfigurationImportEvents(configurations, exclusions);
 		return new AutoConfigurationEntry(configurations, exclusions);
 	}
@@ -417,8 +427,7 @@ public class AutoConfigurationImportSelector
 							AutoConfigurationImportSelector.class.getSimpleName(),
 							deferredImportSelector.getClass().getName()));
 			AutoConfigurationEntry autoConfigurationEntry = ((AutoConfigurationImportSelector) deferredImportSelector)
-					.getAutoConfigurationEntry(getAutoConfigurationMetadata(),
-							annotationMetadata);
+					.getAutoConfigurationEntry(getAutoConfigurationMetadata(), annotationMetadata);
 			this.autoConfigurationEntries.add(autoConfigurationEntry);
 			for (String importClassName : autoConfigurationEntry.getConfigurations()) {
 				this.entries.putIfAbsent(importClassName, annotationMetadata);
@@ -449,8 +458,7 @@ public class AutoConfigurationImportSelector
 
 		private AutoConfigurationMetadata getAutoConfigurationMetadata() {
 			if (this.autoConfigurationMetadata == null) {
-				this.autoConfigurationMetadata = AutoConfigurationMetadataLoader
-						.loadMetadata(this.beanClassLoader);
+				this.autoConfigurationMetadata = AutoConfigurationMetadataLoader.loadMetadata(this.beanClassLoader);
 			}
 			return this.autoConfigurationMetadata;
 		}

@@ -39,6 +39,11 @@ public class JarLauncher extends ExecutableArchiveLauncher {
 		super(archive);
 	}
 
+	/**
+	 * 哪些类在 classPath
+	 * @param entry the jar entry
+	 * @return
+	 */
 	@Override
 	protected boolean isNestedArchive(Archive.Entry entry) {
 		if (entry.isDirectory()) {
@@ -47,6 +52,11 @@ public class JarLauncher extends ExecutableArchiveLauncher {
 		return entry.getName().startsWith(BOOT_INF_LIB);
 	}
 
+	/**
+	 * spring boot jar 方式启动主类
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception {
 		new JarLauncher().launch(args);
 	}
