@@ -304,16 +304,20 @@ public class SpringApplication {
 		try {
 			ApplicationArguments applicationArguments = new DefaultApplicationArguments(
 					args);
-			ConfigurableEnvironment environment = prepareEnvironment(listeners,
-					applicationArguments);
+			ConfigurableEnvironment environment = prepareEnvironment(listeners, applicationArguments);
 			configureIgnoreBeanInfo(environment);
 			Banner printedBanner = printBanner(environment);
+
+			// 创建 ApplicationContext, 注册常用的 处理器
 			context = createApplicationContext();
 			exceptionReporters = getSpringFactoriesInstances(
 					SpringBootExceptionReporter.class,
 					new Class[] { ConfigurableApplicationContext.class }, context);
+
+			// 注册 主启动类
 			prepareContext(context, environment, listeners, applicationArguments,
 					printedBanner);
+
 			refreshContext(context);
 			afterRefresh(context, applicationArguments);
 			stopWatch.stop();
@@ -371,6 +375,8 @@ public class SpringApplication {
 			ApplicationArguments applicationArguments, Banner printedBanner) {
 		context.setEnvironment(environment);
 		postProcessApplicationContext(context);
+
+		// 构建 SpringApplication 时, 已经通过 spi 注入 initializers
 		applyInitializers(context);
 		listeners.contextPrepared(context);
 		if (this.logStartupInfo) {
@@ -390,7 +396,10 @@ public class SpringApplication {
 		// Load the sources
 		Set<Object> sources = getAllSources();
 		Assert.notEmpty(sources, "Sources must not be empty");
+		// 注册 主启动类
 		load(context, sources.toArray(new Object[0]));
+
+		// 构建 SpringApplication 时, 部分 listeners 已经注入 SpringApplication
 		listeners.contextLoaded(context);
 	}
 

@@ -99,6 +99,7 @@ public class AutoConfigurationImportSelector
 		AutoConfigurationMetadata autoConfigurationMetadata = AutoConfigurationMetadataLoader
 				.loadMetadata(this.beanClassLoader);
 
+		// 获取自动配置类
 		AutoConfigurationEntry autoConfigurationEntry =
 				getAutoConfigurationEntry(autoConfigurationMetadata, annotationMetadata);
 		return StringUtils.toStringArray(autoConfigurationEntry.getConfigurations());

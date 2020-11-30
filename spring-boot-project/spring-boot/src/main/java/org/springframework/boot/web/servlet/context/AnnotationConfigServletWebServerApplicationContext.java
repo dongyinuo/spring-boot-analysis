@@ -70,7 +70,16 @@ public class AnnotationConfigServletWebServerApplicationContext
 	 * {@linkplain #refresh refreshed}.
 	 */
 	public AnnotationConfigServletWebServerApplicationContext() {
+
+		// 注册常用的 处理器
+		// org.springframework.context.annotation.AnnotationConfigUtils.registerAnnotationConfigProcessors(org.springframework.beans.factory.support.BeanDefinitionRegistry)
 		this.reader = new AnnotatedBeanDefinitionReader(this);
+
+		// 扫描 classpath 下的 BeanDefinition, 如下
+		// Component @Component},
+		//	 * {@link org.springframework.stereotype.Repository @Repository},
+		//	 * {@link org.springframework.stereotype.Service @Service}, and
+		//	 * {@link org.springframework.stereotype.Controller
 		this.scanner = new ClassPathBeanDefinitionScanner(this);
 	}
 
