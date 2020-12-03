@@ -349,6 +349,9 @@ public class SpringApplication {
 		// Create and configure the environment
 		ConfigurableEnvironment environment = getOrCreateEnvironment();
 		configureEnvironment(environment, applicationArguments.getSourceArgs());
+
+		// 应用 SpringApplicationRunListeners, spring cloud BootstrapConfiguration 的扩展点即在此
+		// 具体参见 spring cloud commons 源码解析
 		listeners.environmentPrepared(environment);
 		bindToSpringApplication(environment);
 		if (!this.isCustomEnvironment) {
